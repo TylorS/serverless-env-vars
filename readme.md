@@ -28,7 +28,7 @@ STAGE=prod serverless-env-vars ...
 
 There is an exposed node API if that's more your thing. The CLI is a `yargs`-based wrapper around this function.
 
-### runWithEnvVars(options: RunWithEnvVarsOptions): Promise<void>
+### runWithEnvVars(options: RunWithEnvVarsOptions): Promise&lt;void&gt;
 
 ```ts
 export type RunWithEnvVarsOptions = {
@@ -42,7 +42,7 @@ export type RunWithEnvVarsOptions = {
 }
 ```
 
-### getConfiguration(): Promise<{ configurationPath: string, configuration: Config }>
+### getConfiguration(): Promise&lt;{ configurationPath: string, configuration: Config }&gt;
 
 Retrieve the configuration of your local serverless setup. If a configuration can not be found or 
 parsed this will throw.
@@ -55,7 +55,7 @@ async function example() {
 }
 ```
 
-### createServerless({ stage?: string }): Promise<Serverless>
+### createServerless({ stage?: string }): Promise&lt;Serverless&gt;
 
 Easily create a Serverless instance.
 
@@ -69,7 +69,7 @@ async function example() {
 }
 ```
 
-### getEnvVars({ stage?: string }): Promise<Record<string, string>>
+### getEnvVars({ stage?: string }): Promise&lt;Record&lt;string, string&gt;&gt;
 
 Get environment variables for your local serverless configuration.
 
@@ -83,7 +83,7 @@ async function example() {
 }
 ```
 
-### setEnvVars(envVars: Record<string, string>): void
+### setEnvVars(envVars: Record&lt;string, string&gt;): void
 
 Set the environment variables within `process.env`
 
