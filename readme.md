@@ -31,13 +31,19 @@ There is an exposed node API if that's more your thing. The CLI is a `yargs`-bas
 ### runWithEnvVars(options: RunWithEnvVarsOptions): Promise&lt;void&gt;
 
 ```ts
+import { runWithEnvVars } from 'serverless-env-vars'
+
+runWithEnvVars({ cmd:'npm', args: ['run', 'build'] }).catch(error => {
+  console.error(error)
+  process.exitCode = 1
+})
+
 export type RunWithEnvVarsOptions = {
   readonly cmd: string
   readonly args: readonly string[]
 
   readonly watch?: boolean
   readonly log?: boolean
-  readonly logStages?: readonly string[]
   readonly stage?: string
 }
 ```
