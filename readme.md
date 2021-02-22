@@ -26,7 +26,21 @@ STAGE=prod serverless-env-vars ...
 
 ## API
 
-There is an exposed node API if that's more your thing.
+There is an exposed node API if that's more your thing. The CLI is a `yargs`-based wrapper around this function.
+
+### runWithEnvVars(options: RunWithEnvVarsOptions): Promise<void>
+
+```ts
+export type RunWithEnvVarsOptions = {
+  readonly cmd: string
+  readonly args: readonly string[]
+
+  readonly watch?: boolean
+  readonly log?: boolean
+  readonly logStages?: readonly string[]
+  readonly stage?: string
+}
+```
 
 ### getConfiguration(): Promise<{ configurationPath: string, configuration: Config }>
 

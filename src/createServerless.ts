@@ -3,7 +3,7 @@ import resolveCliInput from 'serverless/lib/cli/resolve-input'
 
 import { getConfiguration } from './getConfiguration'
 
-const DEFAULT_STAGE = process.env.STAGE || 'dev'
+const DEFAULT_STAGE = process.env.STAGE
 
 export type ServerlessOptions = {
   readonly stage?: string
@@ -14,7 +14,7 @@ export async function createServerless({ stage = DEFAULT_STAGE }: ServerlessOpti
   const { commands, options } = resolveCliInput()
   const serverless = new Serverless({
     commands,
-    options: { ...options, stage },
+    options: stage ? { ...options, stage } : options,
     configurationPath,
     configuration,
     stage,

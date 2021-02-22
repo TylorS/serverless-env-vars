@@ -6,7 +6,7 @@ declare module 'serverless' {
     readonly options: Record<string, string>
     readonly configurationPath: string
     readonly configuration: Config
-    readonly stage: string
+    readonly stage?: string
   }
 
   export class Serverless {

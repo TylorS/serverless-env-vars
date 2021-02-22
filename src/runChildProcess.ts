@@ -1,11 +1,12 @@
 import { spawn } from 'child_process'
 
 export function runChildProcess(
+  cmd: string,
   args: readonly string[],
   env: Readonly<Record<string, string | undefined>>,
   watchMode: boolean,
 ) {
-  const cp = spawn(args[0], args.slice(1), { env, stdio: 'inherit' })
+  const cp = spawn(cmd, args, { env, stdio: 'inherit' })
 
   cp.on('close', (code) => {
     if (!watchMode) {
