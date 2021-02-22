@@ -12,7 +12,6 @@ export type RunWithEnvVarsOptions = {
 
   readonly watch?: boolean
   readonly log?: boolean
-  readonly logStages?: readonly string[]
   readonly stage?: string
 }
 
@@ -34,7 +33,7 @@ export async function runWithEnvVars(options: RunWithEnvVarsOptions) {
 }
 
 async function createCp(options: RunWithEnvVarsOptions) {
-  const { cmd, args, log, stage, logStages = ['dev'], watch = false } = options
+  const { cmd, args, log, stage, watch = false } = options
 
   if (log) {
     console.info('Reading Serverless environment variables...')
@@ -42,7 +41,7 @@ async function createCp(options: RunWithEnvVarsOptions) {
 
   const envVars = await getEnvVars({ stage })
 
-  if (log && logStages.includes(stage ?? 'dev')) {
+  if (log) {
     console.info(`Environment Variables:`)
     console.info(JSON.stringify(envVars, null, 2))
   }

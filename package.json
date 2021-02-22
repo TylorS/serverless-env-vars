@@ -5,6 +5,14 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "bin": "lib/cli.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TylorS/serverless-env-vars.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TylorS/serverless-env-vars/issues"
+  },
+  "homepage": "https://github.com/TylorS/serverless-env-vars#readme",
   "scripts": {
     "build": "tsc",
     "watch": "npm run build -- --watch",

@@ -10,13 +10,12 @@ const program = yargs
     defaultDescription: 'Stage to configure environment variables for',
   })
   .options('log', { type: 'boolean', default: true })
-  .options('logStages', { type: 'array', default: ['dev'] })
   .options('watch', { type: 'boolean', default: false })
 
-const { stage, log, logStages, watch, _ } = program.argv
+const { stage, log, watch, _ } = program.argv
 const [cmd, ...args] = _.map((x) => x.toString())
 
-runWithEnvVars({ cmd, args, stage, log, logStages, watch }).catch((error) => {
+runWithEnvVars({ cmd, args, stage, log, watch }).catch((error) => {
   console.error(error)
   process.exitCode = 1
 })
