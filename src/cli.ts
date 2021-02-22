@@ -58,7 +58,7 @@ async function runWithEnvVars() {
 
   return runChildProcess(
     _.map((x) => x.toString()),
-    envVars,
+    process.env,
     watch,
   )
 }

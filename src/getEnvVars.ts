@@ -6,5 +6,5 @@ import { createServerless, ServerlessOptions } from './createServerless'
 export async function getEnvVars(options: ServerlessOptions = {}): Promise<Record<string, string>> {
   const serverless = await createServerless(options)
 
-  return serverless.service.provider.environment ?? serverless.invokedInstance?.service.provider.environment ?? {}
+  return serverless.invokedInstance?.service.provider.environment ?? serverless.service.provider.environment ?? {}
 }

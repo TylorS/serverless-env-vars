@@ -1,7 +1,11 @@
 import { spawn } from 'child_process'
 
-export function runChildProcess(args: readonly string[], env: Readonly<Record<string, string>>, watchMode: boolean) {
-  const cp = spawn(args[0], args.slice(1), { env: { ...process.env, ...env }, stdio: 'inherit' })
+export function runChildProcess(
+  args: readonly string[],
+  env: Readonly<Record<string, string | undefined>>,
+  watchMode: boolean,
+) {
+  const cp = spawn(args[0], args.slice(1), { env, stdio: 'inherit' })
 
   cp.on('close', (code) => {
     if (!watchMode) {
