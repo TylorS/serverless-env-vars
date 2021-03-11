@@ -13,6 +13,7 @@ export type RunWithEnvVarsOptions = {
   readonly watch?: boolean
   readonly log?: boolean
   readonly stage?: string
+  readonly namespace?: string
 }
 
 export async function runWithEnvVars(options: RunWithEnvVarsOptions) {
@@ -46,7 +47,7 @@ async function createCp(options: RunWithEnvVarsOptions) {
     console.info(JSON.stringify(envVars, null, 2))
   }
 
-  setEnvVars(envVars)
+  setEnvVars(envVars, options.namespace)
 
   if (log) {
     console.info('Serverless environment variables set')
