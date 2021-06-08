@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="./serverless.d.ts" />
+
 import yargs from 'yargs'
 
 import { runWithEnvVars } from './runWithEnvVars'

@@ -24,6 +24,19 @@ serverless-env-vars npm run build
 STAGE=prod serverless-env-vars ...
 ```
 
+## CLI Options
+
+```
+Options:
+  --help       Show help                                               [boolean]
+  --version    Show version number                                     [boolean]
+  --stage       [string] [default: Stage to configure environment variables for]
+  --log                          [choices: "off", "sls", "all"] [default: "off"]
+  --watch                                             [boolean] [default: false]
+  --namespace  Add a namespace to configured environment variables like
+               SNOWPACK_PUBLIC or VITE                                  [string]
+```
+
 ## API
 
 There is an exposed node API if that's more your thing. The CLI is a `yargs`-based wrapper around this function.
@@ -43,7 +56,7 @@ export type RunWithEnvVarsOptions = {
   readonly args: readonly string[]
 
   readonly watch?: boolean
-  readonly log?: boolean
+  readonly log?: 'off' | 'sls' | 'all'
   readonly stage?: string
 }
 ```
