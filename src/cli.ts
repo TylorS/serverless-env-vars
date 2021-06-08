@@ -4,12 +4,15 @@ import yargs from 'yargs'
 
 import { runWithEnvVars } from './runWithEnvVars'
 
+const logOptions = ['off', 'sls', 'all'] as const
+type LogOptions = typeof logOptions[number]
+
 const program = yargs
   .options('stage', {
     type: 'string',
     defaultDescription: 'Stage to configure environment variables for',
   })
-  .options('log', { type: 'boolean', default: true })
+  .options('log', { choices: logOptions, default: 'off' as LogOptions })
   .options('watch', { type: 'boolean', default: false })
   .options('namespace', {
     type: 'string',

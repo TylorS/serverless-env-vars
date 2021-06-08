@@ -11,7 +11,7 @@ export type RunWithEnvVarsOptions = {
   readonly args: readonly string[]
 
   readonly watch?: boolean
-  readonly log?: boolean
+  readonly log?: 'off' | 'sls' | 'all'
   readonly stage?: string
   readonly namespace?: string
 }
@@ -34,36 +34,74 @@ export async function runWithEnvVars(options: RunWithEnvVarsOptions) {
 }
 
 async function createCp(options: RunWithEnvVarsOptions) {
-  const { cmd, args, log, stage, watch = false } = options
+  const { cmd, args, log = 'off', stage, watch = false, namespace } = options
 
-  if (log) {
-    console.info('Reading Serverless environment variables...')
-  }
+  console.info('Reading Serverless environment variables...')
 
-  const envVars = filterAlreadySetEnvVars(await getEnvVars({ stage }))
+  const envVars = await getEnvVars({ stage })
 
-  if (log) {
-    console.info(`Environment Variables To Set:`)
-    console.info(JSON.stringify(envVars, null, 2))
-  }
+  logEnvVars(log, envVars, process.env, namespace)
 
   setEnvVars(envVars, options.namespace)
 
-  if (log) {
-    console.info('Serverless environment variables set')
-  }
+  console.info('Serverless environment variables set')
 
   return runChildProcess(cmd, args, process.env, watch)
 }
 
-function filterAlreadySetEnvVars(envVars: Record<string, string>): Record<string, string> {
-  const toSet: Record<string, string> = {}
-
-  for (const key in envVars) {
-    if (!(key in process.env)) {
-      toSet[key] = envVars[key]
-    }
+function logEnvVars(
+  level: NonNullable<RunWithEnvVarsOptions['log']>,
+  sls: Record<string, string>,
+  env: Record<string, string | undefined>,
+  namespace?: string,
+) {
+  if (level === 'off') {
+    return
   }
 
-  return toSet
+  if (level === 'sls') {
+    logSlsVars(sls, env)
+  }
+
+  if (level === 'all') {
+    logAllVars({ ...sls, ...env })
+  }
+
+  if (namespace) {
+    logNamespaceVariables(namespace, sls, env)
+  }
+}
+
+function logSlsVars(sls: Record<string, string>, env: Record<string, string | undefined>) {
+  console.info('Variables found via Serverless Config:')
+  console.info(JSON.stringify(sls, null, 2))
+
+  const existingVars = Object.fromEntries(
+    Object.keys(sls)
+      .filter((k) => k in env)
+      .map((k) => [k, env[k]] as const),
+  )
+
+  console.info('Variables overriden by existing variables:')
+  console.info(JSON.stringify(existingVars, null, 2))
+}
+
+function logAllVars(env: Record<string, string | undefined>) {
+  console.info('All variables set for your child process')
+  console.info(JSON.stringify(env, null, 2))
+}
+
+function logNamespaceVariables(
+  namespace: string,
+  sls: Record<string, string>,
+  env: Record<string, string | undefined>,
+) {
+  const toLogAbout = Object.fromEntries(
+    Object.entries(sls)
+      .map(([k, v]) => [`${namespace}_${k}`, v])
+      .filter(([k]) => !(k in env)),
+  )
+
+  console.info('Namespaced Variables from Serverless:')
+  console.info(JSON.stringify(toLogAbout, null, 2))
 }
