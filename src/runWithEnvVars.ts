@@ -40,10 +40,10 @@ async function createCp(options: RunWithEnvVarsOptions) {
     console.info('Reading Serverless environment variables...')
   }
 
-  const envVars = await getEnvVars({ stage })
+  const envVars = filterAlreadySetEnvVars(await getEnvVars({ stage }))
 
   if (log) {
-    console.info(`Environment Variables:`)
+    console.info(`Environment Variables To Set:`)
     console.info(JSON.stringify(envVars, null, 2))
   }
 
@@ -54,4 +54,16 @@ async function createCp(options: RunWithEnvVarsOptions) {
   }
 
   return runChildProcess(cmd, args, process.env, watch)
+}
+
+function filterAlreadySetEnvVars(envVars: Record<string, string>): Record<string, string> {
+  const toSet: Record<string, string> = {}
+
+  for (const key in envVars) {
+    if (!(key in process.env)) {
+      toSet[key] = envVars[key]
+    }
+  }
+
+  return toSet
 }
