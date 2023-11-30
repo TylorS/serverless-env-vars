@@ -67,10 +67,28 @@ async function setup(serverless: any, config: any, options: any, commandSchema: 
       sls: require('serverless/lib/configuration/variables/sources/instance-dependent/get-sls')(),
     },
     options: require('serverless/lib/cli/filter-supported-options')(options, { commandSchema, providerName }),
-    fulfilledSources: new Set(),
+    fulfilledSources: new Set(['env', 'file', 'opt', 'self', 'sls']),
     propertyPathsToResolve: new Set(createPathToResolve(config)),
     variableSourcesInConfig: new Set(),
   }
+
+  await resolveVariables(resolverConfiguration)
+
+  Object.assign(resolverConfiguration.sources, {
+    cf: require('serverless/lib/configuration/variables/sources/instance-dependent/get-cf')(serverless),
+    s3: require('serverless/lib/configuration/variables/sources/instance-dependent/get-s3')(serverless),
+    ssm: require('serverless/lib/configuration/variables/sources/instance-dependent/get-ssm')(serverless),
+    aws: require('serverless/lib/configuration/variables/sources/instance-dependent/get-aws')(serverless),
+  })
+  resolverConfiguration.fulfilledSources.add('cf').add('s3').add('ssm').add('aws')
+
+  // Register variable source resolvers provided by external plugins
+  const resolverExternalPluginSources = require('serverless/lib/configuration/variables/sources/resolve-external-plugin-sources')
+  resolverExternalPluginSources(
+    serverless.configuration,
+    resolverConfiguration,
+    serverless.pluginManager.externalPlugins,
+  )
 
   await resolveVariables(resolverConfiguration)
 }
